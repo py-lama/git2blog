@@ -192,12 +192,15 @@ class TestGit2BlogIntegration(unittest.TestCase):
     def setUp(self):
         """Przygotowanie środowiska testowego"""
         self.temp_dir = tempfile.mkdtemp()
-        self.original_dir = os.getcwd()
+        try:
+            self.original_dir = os.getcwd()
+        except FileNotFoundError:
+            self.original_dir = "/tmp"
         os.chdir(self.temp_dir)
         
         # Utwórz fałszywe repozytorium Git
         os.makedirs('.git')
-        
+    
     def tearDown(self):
         """Sprzątanie"""
         os.chdir(self.original_dir)

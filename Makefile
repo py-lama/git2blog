@@ -90,7 +90,7 @@ publish-test: build
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 # Publikacja na PyPI (produkcja)
-publish: patch-version
+publish: patch-version build
 	@echo "🚀 Publikuję na PyPI..."
 	pip install twine
 	twine upload dist/*

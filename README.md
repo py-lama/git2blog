@@ -67,6 +67,7 @@ Edytuj `git2blog.yaml` aby dostosować:
 # Ollama settings
 ollama_url: 'http://localhost:11434'
 model: 'llama3.2'  # lub codellama, mistral, itp.
+timeout: 120  # (opcjonalnie) czas oczekiwania na odpowiedź Ollama w sekundach
 
 # Blog settings
 blog_title: 'Mój Blog Projektowy'
@@ -79,6 +80,10 @@ commit_limit: 50              # Ile commitów przetworzyć
 posts_per_page: 10           # Posty na stronę (przyszła funkcja)
 ignore_merge_commits: true   # Pomijaj merge commity
 ```
+
+## Nowości
+
+- Domyślny timeout zapytań do Ollama został zwiększony do **120 sekund** (wcześniej 30s). Jeśli generacja posta trwa dłużej, nie przerywaj procesu od razu – większe modele mogą potrzebować więcej czasu.
 
 ## Przykładowe użycie
 
@@ -143,6 +148,18 @@ ls -la | grep .git
 git log --oneline -10
 ```
 
+### ❌ "Timeout podczas generowania posta lub długi czas oczekiwania"
+Zwiększono domyślny timeout do 120 sekund. Jeśli nadal pojawia się timeout, sprawdź czy Twój model Ollama nie wymaga jeszcze więcej czasu lub zasobów.
+
+Możesz też ustawić własny timeout (w pliku konfiguracyjnym lub przez zmienną środowiskową, jeśli obsługiwane):
+```yaml
+timeout: 180
+```
+lub:
+```bash
+export OLLAMA_TIMEOUT=180
+```
+
 ## Planowane funkcje
 
 - [ ] Obsługa markdown zamiast HTML
@@ -154,7 +171,7 @@ git log --oneline -10
 
 ## Licencja
 
-Licencja: [Apache 2.0](LICENSE)`
+Licencja: [Apache 2.0](LICENSE)
 
 ## Autor
 

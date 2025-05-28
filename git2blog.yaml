@@ -1,65 +1,12 @@
-# git2blog - Konfiguracja
-# Skopiuj ten plik do katalogu z projektem i dostosuj według potrzeb
-
-# === USTAWIENIA OLLAMA ===
-ollama_url: 'http://localhost:11434'
-model: 'llama3.2'  # Dostępne: llama3.2, codellama, mistral, gemma
-
-# === USTAWIENIA BLOGA ===
-blog_title: 'Mój Blog Projektowy'
-blog_description: 'Blog generowany automatycznie z historii Git'
-author: 'Developer'
-output_dir: 'blog'
-template_dir: 'templates'
-
-# === USTAWIENIA GENEROWANIA ===
-commit_limit: 50                # Maksymalna liczba commitów do przetworzenia
-posts_per_page: 10             # Posty na stronę (dla przyszłej paginacji)
-ignore_merge_commits: true     # Pomijaj merge commity
-ignore_empty_commits: true     # Pomijaj puste commity
-
-# === FILTROWANIE COMMITÓW ===
-# Wzorce commitów do pominięcia (regex)
-ignore_patterns:
-  - '^WIP:'
-  - '^TODO:'
-  - '^TEMP:'
-  - '^Merge branch'
-  - '^Merge pull request'
-
-# Minimalna długość opisu commita (znaki)
-min_commit_length: 10
-
-# === USTAWIENIA AI ===
-# Dodatkowe instrukcje dla AI
-ai_instructions: |
-  Pisz posty w stylu:
-  - Przyjaznym i przystępnym
-  - Z przykładami kodu gdy to możliwe
-  - Z wyjaśnieniem dlaczego dana zmiana była potrzebna
-  - Dodaj emotikonki żeby ożywić treść 🚀
-
-# Maksymalna długość posta (słowa)
-max_post_length: 500
-
-# === USTAWIENIA HTML ===
-# Motyw kolorystyczny
-theme:
-  primary_color: '#2563eb'
-  secondary_color: '#64748b'
-  background_color: '#ffffff'
-  text_color: '#1f2937'
-  accent_color: '#f59e0b'
-
-# === METADATA ===
-# Dodatkowe informacje o blogu
-metadata:
-  language: 'pl'
-  timezone: 'Europe/Warsaw'
-  generator: 'git2blog v1.0.0'
-
-# Social media (opcjonalne)
-social:
-  github: 'https://github.com/username'
-  twitter: '@username'
-  linkedin: 'https://linkedin.com/in/username'
+author: Developer
+blog_description: Blog generowany automatycznie z historii Git
+blog_title: Mój Blog Projektowy
+commit_limit: 50
+ignore_merge_commits: true
+index_template: index.html
+model: llama3.2
+ollama_url: http://localhost:11434
+output_dir: blog
+post_template: post.html
+posts_per_page: 10
+template_dir: templates

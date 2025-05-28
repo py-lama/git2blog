@@ -16,6 +16,7 @@ help:
 	@echo "  docs        Generuj dokumentację"
 	@echo "  demo        Uruchom demo na przykładowych danych"
 	@echo "  ollama      Sprawdź status Ollama"
+	@echo "  timeout     Informacje o timeout dla Ollama (domyślnie 120s)"
 
 # Instalacja środowiska
 install:
@@ -217,3 +218,7 @@ setup: install-dev install-ollama init-example
 	@echo "1. cd example-project"
 	@echo "2. make demo"
 	@echo "3. Otwórz blog/index.html w przeglądarce"
+
+# Timeout info
+timeout:
+	@echo "\nDomyślny timeout zapytań do Ollama to 120 sekund. Możesz to zmienić w git2blog.yaml (timeout: 180) lub przez zmienną środowiskową OLLAMA_TIMEOUT.\n"

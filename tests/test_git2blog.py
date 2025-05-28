@@ -238,6 +238,9 @@ class TestGit2BlogIntegration(unittest.TestCase):
         
         with patch('yaml.safe_load', return_value=config):
             with patch('os.path.exists', return_value=True):
+                # Create a minimal test.yaml file so open() does not fail
+                with open('test.yaml', 'w', encoding='utf-8') as f:
+                    f.write('dummy: value')
                 git2blog = Git2Blog('test.yaml')
                 git2blog.generate_blog()
         

@@ -18,6 +18,7 @@ help:
 	@echo "  ollama      Sprawdź status Ollama"
 	@echo "  timeout     Informacje o timeout dla Ollama (domyślnie 120s)"
 	@echo "  cli-test     Testy CLI git2blog (menu/init/help itp.)"
+	@echo "  patch-version  Zwiększ wersję patch"
 
 # Instalacja środowiska
 install:
@@ -89,7 +90,7 @@ publish-test: build
 	twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 # Publikacja na PyPI (produkcja)
-publish: build
+publish: patch-version
 	@echo "🚀 Publikuję na PyPI..."
 	pip install twine
 	twine upload dist/*
@@ -228,3 +229,19 @@ setup: install-dev install-ollama init-example
 # Timeout info
 timeout:
 	@echo "\nDomyślny timeout zapytań do Ollama to 120 sekund. Możesz to zmienić w git2blog.yaml (timeout: 180) lub przez zmienną środowiskową OLLAMA_TIMEOUT.\n"
+
+# Zwiększ wersję patch
+.PHONY: patch-version
+
+patch-version:
+	@echo "Aktualna wersja: $$(grep __version__ version.py | cut -d'"' -f2)"
+	@old_ver=$$(grep __version__ version.py | cut -d'"' -f2); \
+	major=$$(echo $$old_ver | cut -d. -f1); \
+	minor=$$(echo $$old_ver | cut -d. -f2); \
+	patch=$$(echo $$old_ver | cut -d. -f3); \
+	new_patch=$$(($$patch + 1)); \
+	new_ver="$$major.$$minor.$$new_patch"; \
+	sed -i "s/__version__ = \".*\"/__version__ = \"$$new_ver\"/" version.py; \
+	echo "Nowa wersja: $$new_ver";
+	@git add version.py
+	@git commit -m "Bump patch version to $$(grep __version__ version.py | cut -d'"' -f2)"

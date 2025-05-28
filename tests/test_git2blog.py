@@ -167,13 +167,15 @@ class TestGit2Blog(unittest.TestCase):
                 'title': 'Post 1',
                 'content': 'Treść pierwszego posta.',
                 'date': '2025-01-15 10:30:00',
-                'author': 'Autor 1'
+                'author': 'Autor 1',
+                'commit_hash': 'abc123'
             },
             {
-                'title': 'Post 2', 
+                'title': 'Post 2',
                 'content': 'Treść drugiego posta.',
                 'date': '2025-01-14 15:45:00',
-                'author': 'Autor 2'
+                'author': 'Autor 2',
+                'commit_hash': 'def456'
             }
         ]
         
@@ -181,10 +183,12 @@ class TestGit2Blog(unittest.TestCase):
         
         self.assertIn('Post 1', html)
         self.assertIn('Post 2', html)
+        self.assertIn('Treść pierwszego posta.', html)
+        self.assertIn('Treść drugiego posta.', html)
         self.assertIn('Autor 1', html)
         self.assertIn('Autor 2', html)
-        self.assertIn('post_1.html', html)
-        self.assertIn('post_2.html', html)
+        self.assertIn('abc123', html)
+        self.assertIn('def456', html)
 
 class TestGit2BlogIntegration(unittest.TestCase):
     """Testy integracyjne"""

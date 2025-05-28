@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from setuptools import setup, find_packages
+import re
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -8,9 +9,14 @@ with open("README.md", "r", encoding="utf-8") as fh:
 with open("requirements.txt", "r", encoding="utf-8") as fh:
     requirements = [line.strip() for line in fh if line.strip() and not line.startswith("#")]
 
+# --- POBIERANIE WERSJI Z version.py ---
+with open("version.py", "r", encoding="utf-8") as fh:
+    version_line = fh.read()
+    version = re.search(r'__version__\s*=\s*"([^"]+)"', version_line).group(1)
+
 setup(
     name="git2blog",
-    version="1.0.0",
+    version=version,
     author="Developer",
     author_email="developer@example.com",
     description="Generator bloga z historii Git używający Ollama LLM",

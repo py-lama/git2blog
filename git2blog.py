@@ -44,7 +44,10 @@ class Git2Blog:
             'commit_limit': 50,
             'ignore_merge_commits': True,
             'post_template': 'post.html',
-            'index_template': 'index.html'
+            'index_template': 'index.html',
+            'repo_url': '',
+            'issues_url': '',
+            'pages_url': ''
         }
 
         with open('git2blog.yaml', 'w', encoding='utf-8') as f:
@@ -175,6 +178,25 @@ Zwróć tylko tytuł bez dodatkowych komentarzy.
 
     def create_html_post(self, post: Dict[str, str]) -> str:
         """Tworzy HTML dla pojedynczego posta"""
+        # Dane do linków
+        repo_url = self.config.get('repo_url', '')
+        git_platform = 'github' if 'github' in repo_url else 'gitlab' if 'gitlab' in repo_url else ''
+        author = post['author']
+        commit_hash = post['commit_hash']
+        commit_url = f"{repo_url}/commit/{commit_hash}" if repo_url else None
+        # Link do profilu autora (jeśli email/nick znany i platforma rozpoznana)
+        author_profile = ''
+        if git_platform == 'github' and author:
+            author_profile = f"{repo_url.split('.com/')[0]}.com/{author}" if '/' not in author else f"{repo_url.split('.com/')[0]}.com/{author}"
+        elif git_platform == 'gitlab' and author:
+            author_profile = f"{repo_url.split('.com/')[0]}.com/{author}" if '/' not in author else f"{repo_url.split('.com/')[0]}.com/{author}"
+        # Link do historii na daną datę
+        date = post['date'][:10]
+        history_url = f"{repo_url}/commits?since={date}&until={date}" if repo_url else None
+        # Link do issues i pages (jeśli ustawione w config)
+        issues_url = self.config.get('issues_url', f'{repo_url}/issues' if repo_url else '')
+        pages_url = self.config.get('pages_url', '')
+
         template = f"""
 <!DOCTYPE html>
 <html lang="pl">
@@ -191,6 +213,8 @@ Zwróć tylko tytuł bez dodatkowych komentarzy.
         .back-link {{ margin-top: 30px; }}
         .commit-info {{ background: #f5f5f5; padding: 10px; border-radius: 5px; 
                         font-family: monospace; font-size: 0.8em; margin-top: 20px; }}
+        .meta-links a {{ margin-right: 12px; color: #0066cc; text-decoration: none; }}
+        .meta-links a:hover {{ color: #cc3300; }}
     </style>
 </head>
 <body>
@@ -199,18 +223,24 @@ Zwróć tylko tytuł bez dodatkowych komentarzy.
             {self.config.get('blog_title', 'Blog')}
         </a></h1>
         <p>{self.config.get('blog_description', 'Blog generowany z Git')}</p>
+        <div class="meta-links">
+            {f'<a href="{repo_url}" target="_blank">Repozytorium</a>' if repo_url else ''}
+            {f'<a href="{issues_url}" target="_blank">Issues</a>' if issues_url else ''}
+            {f'<a href="{pages_url}" target="_blank">Strona projektu</a>' if pages_url else ''}
+        </div>
     </div>
 
     <article>
         <h1>{post['title']}</h1>
         <div class="post-meta">
-            Autor: {post['author']} | Data: {post['date'][:10]}
+            Autor: {f'<a href="{author_profile}" target="_blank">{author}</a>' if author_profile else author}
+            | Data: {f'<a href="{history_url}" target="_blank">{date}</a>' if history_url else date}
         </div>
         <div class="post-content">
             {post['content'].replace(chr(10), '<br>')}
         </div>
         <div class="commit-info">
-            Commit: {post['commit_hash'][:8]}
+            Commit: {f'<a href="{commit_url}" target="_blank">{commit_hash[:8]}</a>' if commit_url else commit_hash[:8]}
         </div>
     </article>
 
@@ -224,14 +254,31 @@ Zwróć tylko tytuł bez dodatkowych komentarzy.
 
     def create_index_page(self, posts: List[Dict[str, str]]) -> str:
         """Tworzy stronę główną bloga"""
+        repo_url = self.config.get('repo_url', '')
+        issues_url = self.config.get('issues_url', f'{repo_url}/issues' if repo_url else '')
+        pages_url = self.config.get('pages_url', '')
         posts_html = ""
         for i, post in enumerate(posts):
             filename = f"post_{i + 1}.html"
+            author = post['author']
+            commit_hash = post['commit_hash']
+            # Linki jak w create_html_post
+            git_platform = 'github' if 'github' in repo_url else 'gitlab' if 'gitlab' in repo_url else ''
+            author_profile = ''
+            if git_platform == 'github' and author:
+                author_profile = f"{repo_url.split('.com/')[0]}.com/{author}" if '/' not in author else f"{repo_url.split('.com/')[0]}.com/{author}"
+            elif git_platform == 'gitlab' and author:
+                author_profile = f"{repo_url.split('.com/')[0]}.com/{author}" if '/' not in author else f"{repo_url.split('.com/')[0]}.com/{author}"
+            date = post['date'][:10]
+            history_url = f"{repo_url}/commits?since={date}&until={date}" if repo_url else None
+            commit_url = f"{repo_url}/commit/{commit_hash}" if repo_url else None
             posts_html += f"""
             <article style="border-bottom: 1px solid #eee; padding-bottom: 20px; margin-bottom: 20px;">
                 <h2><a href="{filename}" style="text-decoration: none; color: #333;">{post['title']}</a></h2>
                 <div style="color: #666; font-size: 0.9em; margin-bottom: 10px;">
-                    {post['author']} | {post['date'][:10]}
+                    {f'<a href="{author_profile}" target="_blank">{author}</a>' if author_profile else author} |
+                    {f'<a href="{history_url}" target="_blank">{date}</a>' if history_url else date} |
+                    {f'<a href="{commit_url}" target="_blank">{commit_hash[:8]}</a>' if commit_url else commit_hash[:8]}
                 </div>
                 <p>{post['content'][:200]}...</p>
                 <a href="{filename}">Czytaj więcej →</a>
@@ -253,12 +300,19 @@ Zwróć tylko tytuł bez dodatkowych komentarzy.
         .posts {{ margin-top: 30px; }}
         .footer {{ text-align: center; margin-top: 40px; padding-top: 20px; 
                    border-top: 1px solid #eee; color: #666; font-size: 0.9em; }}
+        .meta-links a {{ margin-right: 12px; color: #0066cc; text-decoration: none; }}
+        .meta-links a:hover {{ color: #cc3300; }}
     </style>
 </head>
 <body>
     <div class="header">
         <h1>{self.config.get('blog_title', 'Mój Blog Projektowy')}</h1>
         <p>{self.config.get('blog_description', 'Blog generowany automatycznie z historii Git')}</p>
+        <div class="meta-links">
+            {f'<a href="{repo_url}" target="_blank">Repozytorium</a>' if repo_url else ''}
+            {f'<a href="{issues_url}" target="_blank">Issues</a>' if issues_url else ''}
+            {f'<a href="{pages_url}" target="_blank">Strona projektu</a>' if pages_url else ''}
+        </div>
     </div>
 
     <div class="posts">
@@ -273,6 +327,97 @@ Zwróć tylko tytuł bez dodatkowych komentarzy.
 </html>
 """
         return template
+
+    def group_commits_by_day(self, commits):
+        """Grupuje commity według dnia"""
+        grouped_commits = {}
+        
+        for commit in commits:
+            # Wyciągnij datę z commita (tylko część daty bez czasu)
+            date_str = commit['date'].split()[0]
+            
+            if date_str not in grouped_commits:
+                grouped_commits[date_str] = []
+                
+            grouped_commits[date_str].append(commit)
+            
+        # Konwertuj na listę grup, posortowaną od najnowszej daty
+        result = []
+        for date_str in sorted(grouped_commits.keys(), reverse=True):
+            commits_for_day = grouped_commits[date_str]
+            # Dodaj datę jako metadane do grupy
+            result.append({
+                'date': date_str,
+                'commits': commits_for_day,
+                'count': len(commits_for_day)
+            })
+            
+        return result
+        
+    def group_commits_by_count(self, commits, count):
+        """Grupuje commity po określonej liczbie"""
+        result = []
+        
+        for i in range(0, len(commits), count):
+            group = commits[i:i+count]
+            result.append({
+                'date': group[0]['date'].split()[0],  # Data pierwszego commita w grupie
+                'commits': group,
+                'count': len(group)
+            })
+            
+        return result
+        
+    def generate_blog_post_from_group(self, commit_group):
+        """Generuje post na podstawie grupy commitów"""
+        # Przygotuj zbiorczy opis wszystkich commitów w grupie
+        commits_summary = ""
+        for commit in commit_group['commits']:
+            commits_summary += f"- {commit['subject']}\n"
+            if commit['body']:
+                # Dodaj wcięcie do treści commita
+                body_indented = '  ' + commit['body'].replace('\n', '\n  ')
+                commits_summary += f"{body_indented}\n"
+        
+        # Przygotuj prompt dla modelu
+        prompt = f"""Napisz post na blog na podstawie poniższych commitów z dnia {commit_group['date']}. 
+        Liczba commitów: {commit_group['count']}
+        
+        Commity:
+        {commits_summary}
+        
+        Napisz szczegółowy post opisujący zmiany wprowadzone w tych commitach. 
+        Uwzględnij kontekst techniczny i biznesowy zmian.
+        Pisz w języku polskim, w stylu profesjonalnego bloga technicznego.
+        """
+        
+        try:
+            # Wywołaj model LLM
+            content = self.call_ollama(prompt)
+            
+            # Wygeneruj tytuł
+            title_prompt = f"Napisz krótki, zwięzły tytuł dla posta o następującej treści, nie dłuższy niż 10 słów: {content[:500]}..."
+            title = self.call_ollama(title_prompt)
+            
+            # Przygotuj post
+            return {
+                'title': title,
+                'date': commit_group['date'],
+                'content': content,
+                'author': self.config.get('author', 'Developer'),
+                'commit_count': commit_group['count']
+            }
+            
+        except Exception as e:
+            print(f"❌ Błąd podczas generowania posta: {e}")
+            # Zwróć podstawowy post w przypadku błędu
+            return {
+                'title': f"Aktualizacja z dnia {commit_group['date']}",
+                'date': commit_group['date'],
+                'content': f"W tym dniu wprowadzono {commit_group['count']} zmian.\n\n{commits_summary}",
+                'author': self.config.get('author', 'Developer'),
+                'commit_count': commit_group['count']
+            }
 
     def generate_blog(self):
         """Główna funkcja generująca blog"""
@@ -303,19 +448,55 @@ Zwróć tylko tytuł bez dodatkowych komentarzy.
 
         # Utwórz katalog wyjściowy
         self.output_dir.mkdir(exist_ok=True)
-
-        # Generuj posty
+        
+        # Sprawdź metodę grupowania
+        grouping_method = self.config.get('post_grouping', {}).get('method', 'commit')
         posts = []
-        for i, commit in enumerate(commits):
-            print(f"⏳ Generuję post {i + 1}/{len(commits)}: {commit['subject'][:50]}...")
-            post = self.generate_blog_post(commit)
-            posts.append(post)
+        
+        if grouping_method == 'day':
+            # Grupuj commity według dni
+            commit_groups = self.group_commits_by_day(commits)
+            print(f"📅 Grupowanie według dni: {len(commit_groups)} grup")
+            
+            for i, group in enumerate(commit_groups):
+                print(f"⏳ Generuję post {i + 1}/{len(commit_groups)}: Dzień {group['date']} ({group['count']} commitów)...")
+                post = self.generate_blog_post_from_group(group)
+                posts.append(post)
+                
+                # Zapisz post jako HTML
+                post_html = self.create_html_post(post)
+                post_file = self.output_dir / f"post_{i + 1}.html"
+                with open(post_file, 'w', encoding='utf-8') as f:
+                    f.write(post_html)
+                    
+        elif grouping_method == 'count':
+            # Grupuj commity po określonej liczbie
+            commits_per_post = self.config.get('post_grouping', {}).get('commits_per_post', 3)
+            commit_groups = self.group_commits_by_count(commits, commits_per_post)
+            print(f"🔢 Grupowanie po {commits_per_post} commitów: {len(commit_groups)} grup")
+            
+            for i, group in enumerate(commit_groups):
+                print(f"⏳ Generuję post {i + 1}/{len(commit_groups)}: Grupa {i+1} ({group['count']} commitów)...")
+                post = self.generate_blog_post_from_group(group)
+                posts.append(post)
+                
+                # Zapisz post jako HTML
+                post_html = self.create_html_post(post)
+                post_file = self.output_dir / f"post_{i + 1}.html"
+                with open(post_file, 'w', encoding='utf-8') as f:
+                    f.write(post_html)
+        else:
+            # Standardowe generowanie - jeden commit, jeden post
+            for i, commit in enumerate(commits):
+                print(f"⏳ Generuję post {i + 1}/{len(commits)}: {commit['subject'][:50]}...")
+                post = self.generate_blog_post(commit)
+                posts.append(post)
 
-            # Zapisz post jako HTML
-            post_html = self.create_html_post(post)
-            post_file = self.output_dir / f"post_{i + 1}.html"
-            with open(post_file, 'w', encoding='utf-8') as f:
-                f.write(post_html)
+                # Zapisz post jako HTML
+                post_html = self.create_html_post(post)
+                post_file = self.output_dir / f"post_{i + 1}.html"
+                with open(post_file, 'w', encoding='utf-8') as f:
+                    f.write(post_html)
 
         # Utwórz stronę główną
         print("📄 Tworzę stronę główną...")
@@ -328,12 +509,52 @@ Zwróć tylko tytuł bez dodatkowych komentarzy.
         print(f"📁 Pliki znajdują się w katalogu: {self.output_dir}")
 
 
+def menu_create_config():
+    print("\n🛠️ Kreator pliku konfiguracyjnego git2blog.yaml\n")
+    blog_title = input("Tytuł bloga [Mój Blog Projektowy]: ") or "Mój Blog Projektowy"
+    blog_description = input("Opis bloga [Blog generowany automatycznie z historii Git]: ") or "Blog generowany automatycznie z historii Git"
+    author = input("Autor [Developer]: ") or "Developer"
+    repo_url = input("URL repozytorium (np. https://github.com/uzytkownik/projekt): ")
+    issues_url = input("URL issues (opcjonalnie): ")
+    pages_url = input("URL GitHub/GitLab Pages (opcjonalnie): ")
+    model = input("Model Ollama [llama3.2]: ") or "llama3.2"
+    commit_limit = input("Limit commitów [50]: ") or "50"
+    timeout = input("Timeout (sekundy) [120]: ") or "120"
+
+    config = {
+        'ollama_url': 'http://localhost:11434',
+        'model': model,
+        'timeout': int(timeout),
+        'output_dir': 'blog',
+        'template_dir': 'templates',
+        'blog_title': blog_title,
+        'blog_description': blog_description,
+        'author': author,
+        'posts_per_page': 10,
+        'commit_limit': int(commit_limit),
+        'ignore_merge_commits': True,
+        'post_template': 'post.html',
+        'index_template': 'index.html',
+        'repo_url': repo_url,
+        'issues_url': issues_url,
+        'pages_url': pages_url
+    }
+    with open('git2blog.yaml', 'w', encoding='utf-8') as f:
+        yaml.dump(config, f, default_flow_style=False, allow_unicode=True)
+    print("\n✅ Utworzono plik git2blog.yaml!")
+
+
 def main():
     parser = argparse.ArgumentParser(description='git2blog - Generator bloga z Git + Ollama')
     parser.add_argument('--init', action='store_true', help='Utwórz domyślny plik konfiguracyjny')
     parser.add_argument('--config', default='git2blog.yaml', help='Ścieżka do pliku konfiguracyjnego')
+    parser.add_argument('--menu', action='store_true', help='Uruchom kreator konfiguracji (interaktywny)')
 
     args = parser.parse_args()
+
+    if args.menu:
+        menu_create_config()
+        return
 
     if args.init:
         git2blog = Git2Blog()

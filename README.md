@@ -4,12 +4,12 @@ Generator bloga z historii Git używający lokalnego modelu Ollama LLM.
 
 ## Funkcje
 
-- 🤖 **AI-powered**: Używa Ollama do generowania interesujących postów z commitów Git
-- 📝 **Automatyczna konwersja**: Przekształca suche commity w angażujące posty blogowe
-- 🎨 **Gotowe szablony**: Generuje kompletny blog HTML gotowy do publikacji
-- ⚙️ **Konfigurowalne**: Pełna personalizacja przez plik YAML
-- 🔍 **Inteligentne filtrowanie**: Pomija merge commity i spam
-- 🌍 **Polski interface**: Wszystko po polsku
+- **AI-powered**: Używa Ollama do generowania interesujących postów z commitów Git
+- **Automatyczna konwersja**: Przekształca suche commity w angażujące posty blogowe
+- **Gotowe szablony**: Generuje kompletny blog HTML gotowy do publikacji
+- **Konfigurowalne**: Pełna personalizacja przez plik YAML
+- **Inteligentne filtrowanie**: Pomija merge commity i spam
+- **Polski interface**: Wszystko po polsku
 
 ## Wymagania
 
@@ -75,6 +75,11 @@ blog_description: 'Blog generowany automatycznie z historii Git'
 author: 'Twoje Imię'
 output_dir: 'blog'
 
+# Linki do projektu (opcjonalnie)
+repo_url: 'https://github.com/uzytkownik/projekt'   # link do repozytorium (GitHub/GitLab)
+issues_url: 'https://github.com/uzytkownik/projekt/issues'  # link do issues (opcjonalnie)
+pages_url: 'https://uzytkownik.github.io/projekt'   # link do GitHub Pages/GitLab Pages (opcjonalnie)
+
 # Generation settings
 commit_limit: 50              # Ile commitów przetworzyć
 posts_per_page: 10           # Posty na stronę (przyszła funkcja)
@@ -84,6 +89,7 @@ ignore_merge_commits: true   # Pomijaj merge commity
 ## Nowości
 
 - Domyślny timeout zapytań do Ollama został zwiększony do **120 sekund** (wcześniej 30s). Jeśli generacja posta trwa dłużej, nie przerywaj procesu od razu – większe modele mogą potrzebować więcej czasu.
+- Dodano obsługę linków do profilu autora (GitHub/GitLab), historii commitów (po dacie), commita, repozytorium, issues i GitHub Pages/GitLab Pages w wygenerowanych stronach HTML (na podstawie konfiguracji repo_url/issues_url/pages_url).
 
 ## Przykładowe użycie
 
@@ -127,7 +133,7 @@ model: 'codellama'
 
 ## Troubleshooting
 
-### ❌ "Nie można połączyć się z Ollama"
+### "Nie można połączyć się z Ollama"
 ```bash
 # Sprawdź czy Ollama działa
 curl http://localhost:11434/api/tags
@@ -136,19 +142,19 @@ curl http://localhost:11434/api/tags
 ollama serve
 ```
 
-### ❌ "Nie znajdujesz się w repozytorium Git"
+### "Nie znajdujesz się w repozytorium Git"
 ```bash
 # Upewnij się że jesteś w katalogu z .git
 ls -la | grep .git
 ```
 
-### ❌ "Nie znaleziono żadnych commitów"
+### "Nie znaleziono żadnych commitów"
 ```bash
 # Sprawdź historię Git
 git log --oneline -10
 ```
 
-### ❌ "Timeout podczas generowania posta lub długi czas oczekiwania"
+### "Timeout podczas generowania posta lub długi czas oczekiwania"
 Zwiększono domyślny timeout do 120 sekund. Jeśli nadal pojawia się timeout, sprawdź czy Twój model Ollama nie wymaga jeszcze więcej czasu lub zasobów.
 
 Możesz też ustawić własny timeout (w pliku konfiguracyjnym lub przez zmienną środowiskową, jeśli obsługiwane):

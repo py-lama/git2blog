@@ -17,6 +17,7 @@ help:
 	@echo "  demo        Uruchom demo na przykładowych danych"
 	@echo "  ollama      Sprawdź status Ollama"
 	@echo "  timeout     Informacje o timeout dla Ollama (domyślnie 120s)"
+	@echo "  cli-test     Testy CLI git2blog (menu/init/help itp.)"
 
 # Instalacja środowiska
 install:
@@ -43,6 +44,11 @@ test-cov:
 	coverage report -m
 	coverage html
 	@echo "📋 Raport HTML: htmlcov/index.html"
+
+# Testy CLI
+cli-test:
+	@echo "\U0001F50E Testy CLI git2blog..."
+	pytest tests/test_cli.py -v
 
 # Sprawdzanie jakości kodu
 lint:

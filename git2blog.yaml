@@ -4,9 +4,12 @@ blog_title: Mój Blog Projektowy
 commit_limit: 50
 ignore_merge_commits: true
 index_template: index.html
+issues_url: ''
 model: llama3.2
 ollama_url: http://localhost:11434
 output_dir: blog
+pages_url: ''
 post_template: post.html
 posts_per_page: 10
+repo_url: ''
 template_dir: templates

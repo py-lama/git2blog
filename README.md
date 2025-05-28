@@ -24,6 +24,29 @@ Generator bloga z historii Git używający lokalnego modelu Ollama LLM.
    ollama run llama3.2
    ```
 
+## Szybki start
+
+1. Zainstaluj zależności:
+   ```bash
+   pip install -r requirements.txt
+   ```
+2. (Opcjonalnie) Zainstaluj narzędzia deweloperskie:
+   ```bash
+   make install-dev
+   ```
+3. Skonfiguruj projekt:
+   ```bash
+   python git2blog.py init
+   # lub przez menu:
+   python git2blog.py menu
+   ```
+4. Wygeneruj bloga:
+   ```bash
+   python git2blog.py run
+   # lub przez Makefile:
+   make run
+   ```
+
 ## Instalacja
 
 1. **Sklonuj/pobierz projekt**:
@@ -58,6 +81,23 @@ Generator bloga z historii Git używający lokalnego modelu Ollama LLM.
    ```bash
    open blog/index.html
    ```
+
+## Testowanie
+
+Aby uruchomić testy:
+```bash
+make test
+# lub bezpośrednio:
+pytest
+```
+
+## Najważniejsze cele Makefile
+
+- `make install` – instalacja zależności
+- `make install-dev` – instalacja narzędzi deweloperskich
+- `make run` – generowanie bloga
+- `make test` – uruchomienie testów
+- `make clean` – usunięcie plików tymczasowych
 
 ## Konfiguracja
 

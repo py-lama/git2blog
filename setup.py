@@ -16,7 +16,7 @@ setup(
     description="Generator bloga z historii Git używający Ollama LLM",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/username/git2blog",
+    url="https://github.com/py-lama/git2blog",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",

@@ -35,7 +35,7 @@ Kompletny plan rozwoju git2blog na 2025 rok i dalej.
   ```yaml
   wordpress:
     url: "https://myblog.wordpress.com"
-    username: "user"
+    py-lama: "user"
     password: "app_password"
     auto_publish: true
     default_category: "Development"
@@ -285,7 +285,7 @@ Kompletny plan rozwoju git2blog na 2025 rok i dalej.
 ## 🤝 **Jak możesz pomóc**
 
 ### 👨‍💻 **Dla deweloperów:**
-- Contribute code na [GitHub](https://github.com/username/git2blog)
+- Contribute code na [GitHub](https://github.com/py-lama/git2blog)
 - Dodawaj nowe integracje
 - Pisz testy i dokumentację
 - Review pull requestów
@@ -342,7 +342,7 @@ Głosuj na funkcje które są dla Ciebie najważniejsze:
 5. **SEO Optimization** (🔥🔥🔥)
 6. **Mobile App** (🔥🔥)
 
-**Dodaj swój głos:** [GitHub Discussions](https://github.com/username/git2blog/discussions)
+**Dodaj swój głos:** [GitHub Discussions](https://github.com/py-lama/git2blog/discussions)
 
 ---
 

@@ -1,0 +1,10 @@
+[
+  {
+    "hash": "abc123",
+    "author": "Jan Kowalski",
+    "email": "jan@example.com",
+    "date": "2025-01-15 10:30:00",
+    "subject": "Dodaj funkcję X",
+    "body": "Implementacja nowej funkcji X"
+  }
+]

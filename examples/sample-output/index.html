@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="git2blog">
+    <title>Blog Projektowy - git2blog Demo</title>
+    <meta name="description" content="Blog generowany automatycznie z historii Git">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Blog Projektowy - git2blog Demo">
+    <meta property="og:description" content="Blog generowany automatycznie z historii Git">
+
+    <!-- Styles -->
+    <style>
+        :root {
+          --primary-color: #2563eb;
+          --secondary-color: #64748b;
+          --background-color: #ffffff;
+          --surface-color: #f8fafc;
+          --text-color: #1f2937;
+          --text-muted: #6b7280;
+          --accent-color: #f59e0b;
+          --border-color: #e5e7eb;
+          --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+          --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+          --border-radius: 8px;
+          --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+          font-family: var(--font-family);
+          line-height: 1.7;
+          color: var(--text-color);
+          background-color: var(--background-color);
+          font-size: 16px;
+        }
+
+        .container { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+
+        .header {
+          padding: 60px 0 40px;
+          border-bottom: 1px solid var(--border-color);
+          margin-bottom: 60px;
+          text-align: center;
+        }
+
+        .blog-title {
+          font-size: 2.5rem;
+          font-weight: 700;
+          margin-bottom: 12px;
+          letter-spacing: -0.025em;
+        }
+
+        .blog-title a {
+          color: var(--text-color);
+          text-decoration: none;
+          transition: color 0.3s ease;
+        }
+
+        .blog-description {
+          font-size: 1.125rem;
+          color: var(--text-muted);
+          margin-bottom: 24px;
+        }
+
+        .posts-list {
+          display: flex;
+          flex-direction: column;
+          gap: 48px;
+        }
+
+        .post-preview {
+          padding: 32px;
+          background-color: var(--surface-color);
+          border-radius: var(--border-radius);
+          border: 1px solid var(--border-color);
+          transition: all 0.3s ease;
+          text-decoration: none;
+          color: inherit;
+          display: block;
+        }
+
+        .post-preview:hover {
+          transform: translateY(-4px);
+          box-shadow: var(--shadow-lg);
+          border-color: var(--primary-color);
+        }
+
+        .post-title {
+          font-size: 1.5rem;
+          font-weight: 600;
+          margin-bottom: 12px;
+          color: var(--text-color);
+          line-height: 1.3;
+        }
+
+        .post-preview:hover .post-title {
+          color: var(--primary-color);
+        }
+
+        .post-meta {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          color: var(--text-muted);
+          font-size: 0.875rem;
+          margin-bottom: 16px;
+        }
+
+        .post-excerpt {
+          color: var(--text-muted);
+          line-height: 1.6;
+          margin-bottom: 20px;
+        }
+
+        .read-more {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          color: var(--primary-color);
+          font-weight: 500;
+          font-size: 0.875rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .footer {
+          border-top: 1px solid var(--border-color);
+          padding: 40px 0;
+          text-align: center;
+          color: var(--text-muted);
+          font-size: 0.875rem;
+          margin-top: 80px;
+        }
+
+        @media (max-width: 768px) {
+          .container { padding: 0 16px; }
+          .header { padding: 40px 0 30px; margin-bottom: 40px; }
+          .blog-title { font-size: 2rem; }
+          .post-preview { padding: 24px; }
+          .posts-list { gap: 32px; }
+        }
+    </style>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="blog-title">
+                    <a href="index.html">🚀 Blog Projektowy</a>
+                </h1>
+                <p class="blog-description">Blog generowany automatycznie z historii Git przy użyciu AI</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="posts-list">
+
+                <article class="post-preview" href="post_1.html">
+                    <h2 class="post-title">🔐 Rewolucja w bezpieczeństwie: Nowy system uwierzytelniania!</h2>
+                    <div class="post-meta">
+                        <span>Jan Kowalski</span>
+                        <span>•</span>
+                        <span>15 stycznia 2025</span>
+                    </div>
+                    <p class="post-excerpt">
+                        Właśnie wdrożyliśmy kompletnie nowy system uwierzytelniania, który podniesie bezpieczeństwo naszej aplikacji na zupełnie nowy poziom! 🛡️
+
+                        Implementacja obejmuje nie tylko podstawowe logowanie z walidacją email, ale także zaawansowane hashowanie haseł oraz middleware do zarządzania sesjami użytkowników...
+                    </p>
+                    <span class="read-more">Czytaj więcej →</span>
+                </article>
+
+                <article class="post-preview" href="post_2.html">
+                    <h2 class="post-title">📱 Mobile-first: Interfejs który zachwyca na każdym urządzeniu</h2>
+                    <div class="post-meta">
+                        <span>Anna Nowak</span>
+                        <span>•</span>
+                        <span>14 stycznia 2025</span>
+                    </div>
+                    <p class="post-excerpt">
+                        Responsywność to dzisiaj standard, ale my poszliśmy o krok dalej! ✨ Przeprojektowaliśmy kompletnie menu nawigacyjne dla urządzeń mobilnych, dodając inteligentne breakpointy CSS i optymalizując układy flexbox.
+
+                        Rezultat? UX który zachwyca niezależnie od wielkości ekranu...
+                    </p>
+                    <span class="read-more">Czytaj więcej →</span>
+                </article>
+
+                <article class="post-preview" href="post_3.html">
+                    <h2 class="post-title">⚡ Turbo boost: Jak przyspieszyliśmy API o 60%</h2>
+                    <div class="post-meta">
+                        <span>Piotr Wiśniewski</span>
+                        <span>•</span>
+                        <span>13 stycznia 2025</span>
+                    </div>
+                    <p class="post-excerpt">
+                        Wydajność to podstawa dobrego UX! 🚀 Przeprowadziliśmy gruntowną optymalizację bazy danych - dodaliśmy strategiczne indeksy, przepisaliśmy wolne zapytania SQL i wdrożyliśmy inteligentny system cache'owania.
+
+                        Efekt? Czas odpowiedzi spadł o ponad 60%! Sprawdź jak to zrobiliśmy...
+                    </p>
+                    <span class="read-more">Czytaj więcej →</span>
+                </article>
+
+                <article class="post-preview" href="post_4.html">
+                    <h2 class="post-title">🧪 Jakość na pierwszym miejscu: 95% pokrycia testami</h2>
+                    <div class="post-meta">
+                        <span>Maria Kowalczyk</span>
+                        <span>•</span>
+                        <span>12 stycznia 2025</span>
+                    </div>
+                    <p class="post-excerpt">
+                        Bezpieczeństwo płatności to nie żarty! 💳 Dlatego stworzyliśmy kompletny zestaw testów jednostkowych dla całego modułu płatności online. Pokrycie kodu wzrosło do imponujących 95%, a testy integracyjne z API Stripe zapewniają pełną pewność...
+                    </p>
+                    <span class="read-more">Czytaj więcej →</span>
+                </article>
+
+                <article class="post-preview" href="post_5.html">
+                    <h2 class="post-title">🌙 Ciemna strona mocy: Elegancki dark mode</h2>
+                    <div class="post-meta">
+                        <span>Tomasz Jankowski</span>
+                        <span>•</span>
+                        <span>11 stycznia 2025</span>
+                    </div>
+                    <p class="post-excerpt">
+                        Ciemny motyw to nie tylko trend - to troska o oczy użytkowników! 👀 Zaimplementowaliśmy elegancki toggle z zapamiętywaniem preferencji. Wszystkie komponenty UI zostały dostosowane do obu motywów kolorystycznych, zapewniając spójność wizualną...
+                    </p>
+                    <span class="read-more">Czytaj więcej →</span>
+                </article>
+
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>
+                    <span>Wygenerowane przez <strong>git2blog</strong></span>
+                    <span>•</span>
+                    <span>Ostatnia aktualizacja: 28 stycznia 2025</span>
+                </p>
+                <p>Autor: <strong>Zespół Deweloperski</strong></p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Dodaj interaktywność do podglądów postów
+        document.querySelectorAll('.post-preview').forEach(preview => {
+            preview.addEventListener('click', function(e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+        });
+
+        // Smooth scroll dla anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -78,10 +78,9 @@ clean:
 	find . -name "*.pyo" -delete
 
 # Budowanie pakietu
-build: clean
-	@echo "📦 Buduję pakiet..."
+build:
+	rm -rf dist/*
 	python setup.py sdist bdist_wheel
-	@echo "✅ Pakiet gotowy w dist/"
 
 # Publikacja na PyPI (test)
 publish-test: build
@@ -243,5 +242,3 @@ patch-version:
 	new_ver="$$major.$$minor.$$new_patch"; \
 	sed -i "s/__version__ = \".*\"/__version__ = \"$$new_ver\"/" version.py; \
 	echo "Nowa wersja: $$new_ver";
-	@git add version.py
-	@git commit -m "Bump patch version to $$(grep __version__ version.py | cut -d'"' -f2)"
